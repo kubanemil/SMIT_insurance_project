@@ -2,8 +2,8 @@ from tortoise import fields
 from tortoise.models import Model
 
 
-class Cargo(Model):
-    name = fields.CharField(max_length=150)
+class Tariff(Model):
+    cargo_type = fields.CharField(max_length=150)
     rate = fields.FloatField()
 
     def __str__(self):
