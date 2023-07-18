@@ -1,7 +1,7 @@
 # SMIT INSURANCE TEST API
 
-### 1.[Readme on English](#eng)
-### 2.[Readme on Russian](#rus)
+### 1. [Readme on English](#eng)
+### 2. [Readme on Russian](#rus)
 
 
 # <a name='eng'>[ENG]</a>
