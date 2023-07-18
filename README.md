@@ -5,7 +5,7 @@
 
 
 # <a name='eng'>[ENG]</a>
-This project was build as a part of job application testing for SMIT.
+This project was build as a part of job application testing for SMIT.Studio.
 
 ### Run with DOCKER
 1. First pull the project from Hub:
@@ -87,7 +87,7 @@ the insurance according to tariff for specific date.
 
 # <a name='rus'>[RUS]</a>
 
-Этот проект был создан в рамках тестирования при приеме на работу в SMIT.
+Этот проект был создан в рамках тестирования при приеме на работу в SMIT.Studio.
 
 ### Запуск с помощью DOCKER
 1. Сначала загрузите проект из Хаба:
