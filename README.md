@@ -7,7 +7,7 @@
 # <a name='eng'>[ENG]</a>
 This project was build as a part of job application testing for SMIT.Studio.
 
-### Run with DOCKER
+## Run with DOCKER
 1. First pull the project from Hub:
 ```shell
 docker pull kubanemil/smit_api
@@ -23,7 +23,24 @@ docker run --name smit_container -p 0.0.0.0:80:80 smit_api
 If you running API with docker, there is <b>no need to create data, 
 as it will be created automatically</b>.
 
-### Run manually
+## Build docker image manually:
+1. Clone the repository:
+```shell
+git clone https://github.com/kubanemil/SMIT_insurance_project
+cd SMIT_insurance_project
+```
+2. Build a docker image:
+```shell
+docker build -t smit_api .
+```
+3. Run the container:
+```shell
+docker run --name smit_container -dp 0.0.0.0:80:80 smit_api
+```
+4. Go to http://127.0.0.1/get_insurance endpoint
+
+
+## Run manually
 1. Clone the repository:
 ```shell
 git clone https://github.com/kubanemil/SMIT_insurance_project
@@ -89,7 +106,7 @@ the insurance according to tariff for specific date.
 
 Этот проект был создан в рамках тестирования при приеме на работу в SMIT.Studio.
 
-### Запуск с помощью DOCKER
+## Запуск с помощью DOCKER
 1. Сначала загрузите проект из Хаба:
 ```shell
 docker pull kubanemil/smit_api
@@ -101,10 +118,26 @@ docker run --name smit_container -p 0.0.0.0:80:80 smit_api
 3. Документация API в: http://127.0.0.1/
 4. Перейдите в http://127.0.0.1/get_insurance, чтобы увидеть страховочный endpoint
 
-
 Если вы запускаете API с помощью Docker, то <b>не нужно создавать данные, так как они будут созданы автоматически</b>.
 
-### Ручной запуск
+## Docker локально:
+1. Отклонируйте репу:
+```shell
+git clone https://github.com/kubanemil/SMIT_insurance_project
+cd SMIT_insurance_project
+```
+2. Создайте docker image:
+```shell
+docker build -t smit_api .
+```
+3. Запустите контейнер:
+```shell
+docker run --name smit_container -dp 0.0.0.0:80:80 smit_api
+```
+4. Перейдите в http://127.0.0.1/get_insurance, чтобы увидеть страховочный endpoint
+
+
+## Ручной запуск
 1. Отклонируйте репу:
 ```shell
 git clone https://github.com/kubanemil/SMIT_insurance_project
@@ -127,6 +160,7 @@ python3 create_data.py
 uvicorn main:app --reload
 ```
 6. Перейдите в http://127.0.0.1/get_insurance, чтобы увидеть страховочный endpoint
+
 
 
 ## Описание API
