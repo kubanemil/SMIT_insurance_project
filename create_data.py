@@ -19,9 +19,10 @@ async def create_tariffs(date_num=10):
     cargos = await Cargo.all()
     days = [datetime.today()+timedelta(days=i) for i in range(1, date_num+1)]
     for day in days:
-        for cargo in cargos:
+         for cargo in cargos:
+            print('222cargo', cargo.name)
             rate = randint(5, 100)/1000
-            instance = Tariff(cargo_type=cargo.name, rate=rate, date=day)
+            instance = Tariff(cargo_type=cargo, rate=rate, date=day)
             await instance.save()
 
     await Tortoise.close_connections()

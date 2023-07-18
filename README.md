@@ -19,3 +19,6 @@ in API docs. Just get to /get_insurance endpoint and input COST and the cargo na
 insurance.
 
 If you want to add more cargo, and specify it's rate by date, you can use /create_cargo endpoint.
+
+You can also add your own cargo's with 'Data Manager' router.
+User /create/cargo/add to add your own 
