@@ -1,32 +1,32 @@
 import httpx
-from typing import Annotated
+import data_api
 from datetime import date
 from tools import group_tariff_by_date
 from models import Cargo, Tariff
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Request
 from tortoise.contrib.pydantic import pydantic_model_creator
-from tortoise.contrib.fastapi import register_tortoise, HTTPNotFoundError
+from tortoise.contrib.fastapi import register_tortoise
 
-# TODO: create a data creation API
 app = FastAPI(docs_url='/')
-cargo_pydantic = pydantic_model_creator(Cargo)
+app.include_router(data_api.router)
+
 tariff_pydantic = pydantic_model_creator(Tariff)
+cargo_pydantic = pydantic_model_creator(Cargo)
 
-
-@app.get("/cargos")
+@app.get("/cargos", tags=['Main'])
 async def get_cargos():
     """Get the list of existing cargos."""
     return await cargo_pydantic.from_queryset(Cargo.all())
 
 
-@app.get("/tariff")
+@app.get("/tariff", tags=['Main'])
 async def get_tariffs_by_date():
     """Gets tariff rates for each cargo by date."""
     tariff = Tariff.all().order_by("date")
     return await group_tariff_by_date(tariff)
 
 
-@app.get("/get_insurance")
+@app.get("/get_insurance", tags=['Main'])
 async def calc_insurance(request: Request, cargo_name: str, cargo_price: int):
     """
     Given the cargo's name and price, calculates the insurance for each date according to tariff.
@@ -58,7 +58,7 @@ async def calc_insurance(request: Request, cargo_name: str, cargo_price: int):
     return {'message': 'No specified cargo.'}
 
 
-@app.get("/get_insurance/by_date")
+@app.get("/get_insurance/by_date", tags=['Main'])
 async def calc_insurance_by_date(request: Request, cargo_name: str, cargo_price: int, cargo_date: date):
     """
     Given the cargo's name and price, calculates the insurance according to tariff for specific date.
@@ -72,13 +72,6 @@ async def calc_insurance_by_date(request: Request, cargo_name: str, cargo_price:
             'insurance': {str(cargo_date): insurances['insurances'][str(cargo_date)]}}
     return insurances
 
-
-@app.post("/cargos/create")
-async def say_hello(name=Form(...)):
-    """Adds cargo to cargo list."""
-    cargo = await Cargo.create(name=name)
-    cargo_json = await cargo_pydantic.from_tortoise_orm(cargo)
-    return cargo_json
 
 register_tortoise(app, db_url='sqlite://database.sqlite3',
                   modules={"models": ['models']},
