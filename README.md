@@ -22,3 +22,9 @@ If you want to add more cargo, and specify it's rate by date, you can use /creat
 
 You can also add your own cargo's with 'Data Manager' router.
 User /create/cargo/add to add your own 
+
+If you running the project by docker, you don't need to create cargos and tariff, it
+will be created automatically.
+If you running the project manually, run 'python create_data.py', or you can create data
+with POST /data/cargos and POST /data/tariff (not that you need to create cargos first, because
+tariff uses cargo queryset to create itself.) 

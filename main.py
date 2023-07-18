@@ -20,7 +20,7 @@ async def get_cargos():
 
 
 @app.get("/tariff", tags=['Main'])
-async def get_tariffs_by_date():
+async def get_tariff():
     """Gets tariff rates for each cargo by date."""
     tariff = Tariff.all().order_by("date")
     return await group_tariff_by_date(tariff)
@@ -63,14 +63,17 @@ async def calc_insurance_by_date(request: Request, cargo_name: str, cargo_price:
     """
     Given the cargo's name and price, calculates the insurance according to tariff for specific date.
     """
-    insurances = await calc_insurance(request, cargo_name, cargo_price)
+    response = await calc_insurance(request, cargo_name, cargo_price)
+    insurances = response.get('insurances')
     if insurances and type(insurances) == dict:
-        print("!!", {str(cargo_date): insurances['insurances'][str(cargo_date)]})
-        return {
-            'cargo': cargo_name,
-            'price': cargo_price,
-            'insurance': {str(cargo_date): insurances['insurances'][str(cargo_date)]}}
-    return insurances
+        cargo_date = str(cargo_date)
+        if insurances.get(cargo_date):
+            return {
+                'cargo': cargo_name,
+                'price': cargo_price,
+                'insurance': {cargo_date: insurances.get(cargo_date)}}
+        return {'message': "No insurance record for a given date."}
+    return response
 
 
 register_tortoise(app, db_url='sqlite://database.sqlite3',
