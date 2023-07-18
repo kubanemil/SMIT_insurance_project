@@ -44,6 +44,7 @@ docker run --name smit_container -dp 0.0.0.0:80:80 smit_api
 1. Clone the repository:
 ```shell
 git clone https://github.com/kubanemil/SMIT_insurance_project
+cd SMIT_insurance_project
 ```
 2. Create and activate a virtual environment (recommended):
 ```shell
@@ -141,6 +142,7 @@ docker run --name smit_container -dp 0.0.0.0:80:80 smit_api
 1. Отклонируйте репу:
 ```shell
 git clone https://github.com/kubanemil/SMIT_insurance_project
+cd SMIT_insurance_project
 ```
 2. Создайте и активруйте venv:
 ```shell
