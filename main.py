@@ -1,77 +1,81 @@
-from fastapi import FastAPI, Form, Request
+import httpx
+from typing import Annotated
+from datetime import date
+from tools import group_tariff_by_date
 from models import Cargo, Tariff
+from fastapi import FastAPI, Form, Request
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.contrib.fastapi import register_tortoise, HTTPNotFoundError
-import httpx
 
 # TODO: create a data creation API
-app = FastAPI()
+app = FastAPI(docs_url='/')
 cargo_pydantic = pydantic_model_creator(Cargo)
 tariff_pydantic = pydantic_model_creator(Tariff)
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+@app.get("/cargos")
+async def get_cargos():
+    """Get the list of existing cargos."""
+    return await cargo_pydantic.from_queryset(Cargo.all())
 
 
-@app.get("/tariffs", response_model=tariff_pydantic)
-async def get_tariffs():
-    return await tariff_pydantic.from_queryset(Tariff.all())
-
-
-@app.get("/tariffs/date")
+@app.get("/tariff")
 async def get_tariffs_by_date():
-    tariffs = Tariff.all().order_by("date")
-
-    grouped_data = {}
-    async for item in tariffs:
-        date = item.date.isoformat()
-        type_rate = {
-            'cargo_type': item.cargo_type,
-            'rate': item.rate
-        }
-        if date not in grouped_data:
-            grouped_data[date] = []
-        grouped_data[date].append(type_rate)
-    return grouped_data
+    """Gets tariff rates for each cargo by date."""
+    tariff = Tariff.all().order_by("date")
+    return await group_tariff_by_date(tariff)
 
 
-@app.get("/insurance")
-async def calc_insurance(request: Request, price: int, cargo: str):
-    if await Cargo.filter(name=cargo).exists():
+@app.get("/get_insurance")
+async def calc_insurance(request: Request, cargo_name: str, cargo_price: int):
+    """
+    Given the cargo's name and price, calculates the insurance for each date according to tariff.
+    """
+    if await Cargo.filter(name=cargo_name).exists():
+        # gets request with httpx in case that API is not internal.
         url_components = request.url.components
-        tariff_url = f"{url_components[0]}://{url_components[1]}/tariffs/date"
+        tariff_url = f"{url_components[0]}://{url_components[1]}/tariff"
         async with httpx.AsyncClient() as client:
             response = await client.get(tariff_url)
 
         if response.status_code == 200:
             tariff = response.json()
-            insurance = {}
-            for date, infos in tariff.items():
+            insurances = {}
+            for day, infos in tariff.items():
                 for info in infos:
-                    if info['cargo_type'] == cargo:
-                        insurance[date] = round(info['rate']*price, 5)
-            return insurance
-        return {'url': tariff_url,
-                'status': response.status_code}
-    return {'message': 'No specified cargo'}
+                    if info['cargo_type'] == cargo_name:
+                        insurances[day] = round(info['rate']*cargo_price, 5)
+            return {
+                'cargo': cargo_name,
+                'price': cargo_price,
+                'insurances': insurances}
+
+        return {
+            'message': 'Error with getting tariff.',
+            'url': tariff_url,
+            'status': response.status_code}
+
+    return {'message': 'No specified cargo.'}
 
 
-@app.get("/cargos")
-async def get_cargos():
-    return await cargo_pydantic.from_queryset(Cargo.all())
-
-
-@app.get("/cargos/{cargo_id}", responses={
-    404: {'model': HTTPNotFoundError}
-})
-async def get_cargos_by_id(cargo_id: int):
-    return await cargo_pydantic.from_queryset_single(Cargo.get(pk=cargo_id))
+@app.get("/get_insurance/by_date")
+async def calc_insurance_by_date(request: Request, cargo_name: str, cargo_price: int, cargo_date: date):
+    """
+    Given the cargo's name and price, calculates the insurance according to tariff for specific date.
+    """
+    insurances = await calc_insurance(request, cargo_name, cargo_price)
+    if insurances and type(insurances) == dict:
+        print("!!", {str(cargo_date): insurances['insurances'][str(cargo_date)]})
+        return {
+            'cargo': cargo_name,
+            'price': cargo_price,
+            'insurance': {str(cargo_date): insurances['insurances'][str(cargo_date)]}}
+    return insurances
 
 
 @app.post("/cargos/create")
 async def say_hello(name=Form(...)):
+    """Adds cargo to cargo list."""
     cargo = await Cargo.create(name=name)
     cargo_json = await cargo_pydantic.from_tortoise_orm(cargo)
     return cargo_json

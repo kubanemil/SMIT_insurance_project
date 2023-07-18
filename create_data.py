@@ -15,9 +15,9 @@ async def connect_db():
     await Tortoise.generate_schemas()
 
 
-async def create_tariffs():
+async def create_tariffs(date_num=10):
     cargos = await Cargo.all()
-    days = [datetime.today()+timedelta(days=i) for i in range(1, 6)]
+    days = [datetime.today()+timedelta(days=i) for i in range(1, date_num+1)]
     for day in days:
         for cargo in cargos:
             rate = randint(5, 100)/1000
