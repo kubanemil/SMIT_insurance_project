@@ -1,15 +1,18 @@
 # SMIT INSURANCE TEST API
 
 # [ENG]
-This project was build as part of job application testing for SMIT.
+This project was build as a part of job application testing for SMIT.
 
 ### Run with DOCKER
 1. First pull the project from Hub:
-> docker pull kubanemil/smit_api
+```shell
+docker pull kubanemil/smit_api
+``` 
 
 2. Next, create and run the container:
-> docker run --name smit_container -p 0.0.0.0:80:80 smit_api
-
+```shell
+docker run --name smit_container -p 0.0.0.0:80:80 smit_api
+```
 3. Go to http://127.0.0.1/ to see API documentation.
 4. Go to http://127.0.0.1/get_insurance endpoint,
 
@@ -18,17 +21,26 @@ as it will be created automatically</b>.
 
 ### Run manually
 1. Clone the repository:
-> git clone https://github.com/kubanemil/SMIT_insurance_project
+```shell
+git clone https://github.com/kubanemil/SMIT_insurance_project
+```
 2. Create and activate a virtual environment (recommended):
-> python3 -m venv venv
-
-> source venv/bin/activate
+```shell
+python3 -m venv venv
+source venv/bin/activate
+```
 3. Install requirements:
-> pip install -r requirements.txt
+```shell
+pip install -r requirements.txt
+```
 4. Initiate the database and populate it with dataset:
-> python3 create_data.py
+```shell
+python3 create_data.py
+```
 5. Run the API:
-> uvicorn main:app --reload
+```shell
+uvicorn main:app --reload
+```
 6. Go to http://127.0.0.1/get_insurance endpoint
 
 
@@ -68,11 +80,13 @@ the insurance according to tariff for specific date.
 
 ### Запуск с помощью DOCKER
 1. Сначала загрузите проект из Хаба:
-> docker pull kubanemil/smit_api
-
+```shell
+docker pull kubanemil/smit_api
+```
 2. Затем запустите контейнер:
-> docker run --name smit_container -p 0.0.0.0:80:80 smit_api
-
+```shell
+docker run --name smit_container -p 0.0.0.0:80:80 smit_api
+```
 3. Документация API в: http://127.0.0.1/
 4. Перейдите в http://127.0.0.1/get_insurance, чтобы увидеть страховочный endpoint
 
@@ -81,17 +95,26 @@ the insurance according to tariff for specific date.
 
 ### Ручной запуск
 1. Отклонируйте репу:
-> git clone https://github.com/kubanemil/SMIT_insurance_project
+```shell
+git clone https://github.com/kubanemil/SMIT_insurance_project
+```
 2. Создайте и активруйте venv:
-> python3 -m venv venv
-
-> source venv/bin/activate
+```shell
+python3 -m venv venv
+source venv/bin/activate
+```
 3. Установите requirements:
-> pip install -r requirements.txt
+```shell
+pip install -r requirements.txt
+```
 4. Создайте базу данных и сами данные с этим скриптом:
-> python3 create_data.py
+```shell
+python3 create_data.py
+```
 5. Запустите API:
-> uvicorn main:app --reload
+```shell
+uvicorn main:app --reload
+```
 6. Перейдите в http://127.0.0.1/get_insurance, чтобы увидеть страховочный endpoint
 
 
