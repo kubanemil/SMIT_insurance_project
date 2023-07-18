@@ -38,7 +38,7 @@ async def get_tariffs_by_date():
 
 
 @app.get("/insurance")
-async def calc_insurance(request: Request, declared_price: int, cargo: str):
+async def calc_insurance(request: Request, price: int, cargo: str):
     if await Cargo.filter(name=cargo).exists():
         url_components = request.url.components
         tariff_url = f"{url_components[0]}://{url_components[1]}/tariffs/date"
@@ -51,7 +51,7 @@ async def calc_insurance(request: Request, declared_price: int, cargo: str):
             for date, infos in tariff.items():
                 for info in infos:
                     if info['cargo_type'] == cargo:
-                        insurance[date] = round(info['rate']*base_price, 5)
+                        insurance[date] = round(info['rate']*price, 5)
             return insurance
         return {'url': tariff_url,
                 'status': response.status_code}

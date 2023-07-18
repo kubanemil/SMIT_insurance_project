@@ -2,5 +2,6 @@ python-multipart
 fastapi
 uvicorn
 pydantic < 2.0.0
+httpx
 tortoise-orm
 numpy
