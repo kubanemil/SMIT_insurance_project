@@ -1,6 +1,10 @@
 # SMIT INSURANCE TEST API
 
-# [ENG]
+### 1.[ENG](#eng)
+### 2.[RUS](#rus)
+
+
+# <a name='eng'>[ENG]</a>
 This project was build as a part of job application testing for SMIT.
 
 ### Run with DOCKER
@@ -74,7 +78,14 @@ for each date according to tariff.
 the insurance according to tariff for specific date.
 
 
-# [RUS]
+
+----
+
+----
+
+----
+
+# <a name='rus'>[RUS]</a>
 
 Этот проект был создан в рамках тестирования при приеме на работу в SMIT.
 
